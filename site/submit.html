@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit Plugin — QanotHub</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--surface3:#22222e;
+  --border:#2a2a3a;--border2:#3a3a4a;
+  --text:#e4e4ec;--text2:#9898a8;--text3:#686878;
+  --accent:#6c5ce7;--accent2:#a29bfe;--accent-glow:rgba(108,92,231,.15);
+  --green:#00b894;--green-bg:rgba(0,184,148,.08);
+  --red:#ff6b6b;--orange:#fdcb6e;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0}
+.header-inner{max-width:800px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--text)}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
+.logo span{color:var(--accent2)}
+.header-links{display:flex;gap:20px;font-size:14px}
+.header-links a{color:var(--text2)}
+
+.content{max-width:800px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.subtitle{color:var(--text2);font-size:16px;margin-bottom:40px}
+
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px}
+.section h2{font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.step-num{width:28px;height:28px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+
+.section p,.section li{color:var(--text2);font-size:14px;margin-bottom:8px}
+.section ul{padding-left:20px}
+.section code{background:var(--surface3);padding:2px 8px;border-radius:4px;font-size:13px;color:var(--green)}
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;overflow-x:auto;font-size:13px;color:var(--text);margin:12px 0;line-height:1.5}
+
+.form-section{margin-top:40px}
+.form-section h2{font-size:22px;margin-bottom:8px}
+.form-section .subtitle{margin-bottom:24px;font-size:14px}
+
+.field{margin-bottom:20px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.field input,.field textarea,.field select{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;outline:none;font-family:inherit;transition:border .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{min-height:100px;resize:vertical}
+.field .hint{font-size:12px;color:var(--text3);margin-top:4px}
+
+.submit-btn{padding:14px 32px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;width:100%}
+.submit-btn:hover{background:#5b4bd5}
+
+.result{margin-top:20px;padding:16px;border-radius:var(--radius-sm);display:none}
+.result.success{display:block;background:var(--green-bg);border:1px solid rgba(0,184,148,.2);color:var(--green)}
+.result.error{display:block;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);color:var(--red)}
+
+.security-box{background:rgba(253,203,110,.06);border:1px solid rgba(253,203,110,.15);border-radius:var(--radius-sm);padding:16px;margin-top:16px}
+.security-box h3{color:var(--orange);font-size:14px;margin-bottom:8px}
+.security-box ul{color:var(--text2);font-size:13px;padding-left:18px}
+.security-box li{margin-bottom:4px}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--text3);font-size:13px}
+
+@media(max-width:640px){
+  h1{font-size:24px}
+  .header-inner{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">Q</div>
+      Qanot<span>Hub</span>
+    </a>
+    <nav class="header-links">
+      <a href="index.html">Plugins</a>
+      <a href="https://github.com/QANOT/qanot">Framework</a>
+      <a href="https://github.com/QANOT/qanot-plugins">Registry</a>
+    </nav>
+  </div>
+</header>
+
+<div class="content">
+  <h1>Submit a Plugin</h1>
+  <p class="subtitle">Share your plugin with the Qanot AI community. All submissions are security-reviewed before inclusion.</p>
+
+  <div class="section">
+    <h2><span class="step-num">1</span> Create your plugin repo</h2>
+    <p>Your repo should follow this structure:</p>
+    <pre>qanot-plugin-your-name/
+  plugin.json      # Required: manifest
+  plugin.py        # Required: QanotPlugin class
+  README.md        # Recommended: usage docs</pre>
+    <p>Example <code>plugin.json</code>:</p>
+    <pre>{
+  "name": "your_plugin",
+  "version": "1.0.0",
+  "description": "What your plugin does",
+  "author": "Your Name",
+  "dependencies": ["aiohttp"],
+  "required_config": ["api_key"]
+}</pre>
+  </div>
+
+  <div class="section">
+    <h2><span class="step-num">2</span> Test locally</h2>
+    <p>Install and scan your plugin before submitting:</p>
+    <pre># Install from local or git
+qanot plugin install https://github.com/you/qanot-plugin-your-name.git
+
+# Security scan
+qanot plugin scan your_name
+
+# Verify it works
+qanot start</pre>
+  </div>
+
+  <div class="section">
+    <h2><span class="step-num">3</span> Submit for review</h2>
+    <p>Two ways to submit:</p>
+    <ul>
+      <li><strong>GitHub PR</strong> — Fork <a href="https://github.com/QANOT/qanot-plugins">QANOT/qanot-plugins</a>, add your entry to <code>index.json</code>, open a PR</li>
+      <li><strong>Quick Submit</strong> — Fill the form below and we'll create the PR for you</li>
+    </ul>
+
+    <div class="security-box">
+      <h3>Security Requirements</h3>
+      <ul>
+        <li>No <code>install.sh</code>, <code>.exe</code>, <code>.bat</code>, or shell scripts</li>
+        <li>No <code>eval()</code>, <code>exec()</code>, <code>os.system()</code> unless justified</li>
+        <li>No embedded secrets or <code>.env</code> files</li>
+        <li>Dependencies must be from the approved allowlist</li>
+        <li>HTTPS git URLs only</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h2>Quick Submit</h2>
+    <p class="subtitle">Fill in your plugin details. This generates a GitHub Issue for review.</p>
+
+    <form id="submitForm" onsubmit="submitPlugin(event)">
+      <div class="field">
+        <label>Plugin Name</label>
+        <input type="text" id="f_name" placeholder="my_plugin" required pattern="[a-z][a-z0-9_]{0,63}">
+        <div class="hint">Lowercase letters, numbers, underscores only. Max 64 chars.</div>
+      </div>
+
+      <div class="field">
+        <label>Git Repository URL</label>
+        <input type="url" id="f_git" placeholder="https://github.com/you/qanot-plugin-my-plugin" required>
+        <div class="hint">Must be HTTPS. The repo must contain plugin.py and plugin.json.</div>
+      </div>
+
+      <div class="field">
+        <label>Version</label>
+        <input type="text" id="f_version" placeholder="1.0.0" value="1.0.0" required>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea id="f_desc" placeholder="What does your plugin do? Be specific." required></textarea>
+      </div>
+
+      <div class="field">
+        <label>Author</label>
+        <input type="text" id="f_author" placeholder="Your name or organization" required>
+      </div>
+
+      <div class="field">
+        <label>Tags (comma-separated)</label>
+        <input type="text" id="f_tags" placeholder="crm, sales, integration">
+        <div class="hint">Help users discover your plugin. Use relevant category keywords.</div>
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select id="f_category">
+          <option value="crm">CRM / Sales</option>
+          <option value="pos">POS / ERP</option>
+          <option value="hr">HR / Employees</option>
+          <option value="messaging">Messaging / SMS</option>
+          <option value="database">Database</option>
+          <option value="accounting">Accounting</option>
+          <option value="utility">Utility</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit for Review</button>
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>QanotHub &mdash; Plugin marketplace for <a href="https://github.com/QANOT/qanot">Qanot AI</a></p>
+</footer>
+
+<script>
+function submitPlugin(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('f_name').value.trim();
+  const git = document.getElementById('f_git').value.trim();
+  const version = document.getElementById('f_version').value.trim();
+  const desc = document.getElementById('f_desc').value.trim();
+  const author = document.getElementById('f_author').value.trim();
+  const tags = document.getElementById('f_tags').value.trim();
+  const category = document.getElementById('f_category').value;
+  const result = document.getElementById('result');
+
+  // Validate HTTPS
+  if (!git.startsWith('https://')) {
+    result.className = 'result error';
+    result.textContent = 'Git URL must use HTTPS (not HTTP or SSH).';
+    return;
+  }
+
+  // Validate name
+  if (!/^[a-z][a-z0-9_]{0,63}$/.test(name)) {
+    result.className = 'result error';
+    result.textContent = 'Plugin name must be lowercase letters/numbers/underscores, start with a letter, max 64 chars.';
+    return;
+  }
+
+  // Build GitHub issue body
+  const tagList = tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [category];
+  const issueTitle = encodeURIComponent(`[Plugin Submission] ${name} v${version}`);
+  const issueBody = encodeURIComponent(
+`## Plugin Submission
+
+**Name:** ${name}
+**Version:** ${version}
+**Author:** ${author}
+**Git URL:** ${git}
+**Category:** ${category}
+**Tags:** ${tagList.join(', ')}
+
+**Description:**
+${desc}
+
+---
+
+### index.json entry
+
+\`\`\`json
+{
+  "name": "${name}",
+  "version": "${version}",
+  "description": "${desc}",
+  "author": "${author}",
+  "git_url": "${git}",
+  "homepage": "${git.replace('.git', '')}",
+  "tags": ${JSON.stringify(tagList)},
+  "min_qanot_version": "2.0.0"
+}
+\`\`\`
+
+### Checklist
+- [ ] Repo has plugin.py with QanotPlugin class
+- [ ] Repo has plugin.json manifest
+- [ ] No install.sh or shell scripts
+- [ ] No eval/exec/os.system
+- [ ] HTTPS git URL
+- [ ] Dependencies on allowlist
+`
+  );
+
+  const issueUrl = `https://github.com/QANOT/qanot-plugins/issues/new?title=${issueTitle}&body=${issueBody}&labels=plugin-submission`;
+
+  result.className = 'result success';
+  result.innerHTML = 'Redirecting to GitHub to create the submission issue...';
+
+  setTimeout(() => {
+    window.open(issueUrl, '_blank');
+    result.innerHTML = `Submission opened! <a href="${issueUrl}" target="_blank">View on GitHub</a><br>We'll review your plugin and merge it into the registry.`;
+  }, 500);
+}
+</script>
+</body>
+</html>
