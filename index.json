@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-22",
+  "plugins": [
+    {
+      "name": "amocrm",
+      "version": "1.0.0",
+      "description": "amoCRM CRM integration — leads, contacts, pipelines, tasks",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-amocrm.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-amocrm",
+      "tags": ["crm", "sales", "leads", "contacts"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "bitrix24",
+      "version": "1.0.0",
+      "description": "Bitrix24 CRM integration — deals, leads, contacts, tasks, activities",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-bitrix24.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-bitrix24",
+      "tags": ["crm", "sales", "bitrix", "tasks"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "bito",
+      "version": "1.0.0",
+      "description": "Bito POS/ERP integration — sotuvlar, tovarlar, mijozlar, ombor",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-bito.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-bito",
+      "tags": ["pos", "erp", "sales", "inventory", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "moysklad",
+      "version": "1.0.0",
+      "description": "MoySklad — tovarlar, ombor, sotuvlar, xaridlar, hisobotlar",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-moysklad.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-moysklad",
+      "tags": ["erp", "inventory", "sales", "purchases", "warehouse"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "onec",
+      "version": "1.0.0",
+      "description": "1C Enterprise integration — contractors, products, sales, purchases, balances",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-onec.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-onec",
+      "tags": ["erp", "1c", "accounting", "enterprise", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "ibox",
+      "version": "1.0.0",
+      "description": "ibox.io ombor boshqaruv tizimi — tovarlar, qoldiq, sotuvlar, hisobotlar",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-ibox.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-ibox",
+      "tags": ["inventory", "warehouse", "pos", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "eskiz",
+      "version": "1.0.0",
+      "description": "Eskiz SMS gateway — xabar yuborish, holat tekshirish, balans, hisobotlar",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-eskiz.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-eskiz",
+      "tags": ["sms", "notification", "messaging", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "mysql_query",
+      "version": "1.0.0",
+      "description": "MySQL SELECT-only query tool with 500-row limit and 5s timeout",
+      "author": "SirliAI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-mysql-query.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-mysql-query",
+      "tags": ["database", "mysql", "sql", "query"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "absmarket",
+      "version": "1.0.0",
+      "description": "AbsMarket POS plugin — 30 API tools + MySQL query",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-absmarket.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-absmarket",
+      "tags": ["pos", "market", "sales", "inventory", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "absvision",
+      "version": "1.0.0",
+      "description": "AbsVision HR plugin — 25 HR tools with OAuth refresh token support",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-absvision.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-absvision",
+      "tags": ["hr", "employees", "payroll", "attendance", "uzbekistan"],
+      "min_qanot_version": "2.0.0"
+    },
+    {
+      "name": "cloud_reporter",
+      "version": "1.0.0",
+      "description": "Reports usage metrics to Qanot Cloud platform",
+      "author": "Qanot AI",
+      "git_url": "https://github.com/QANOT/qanot-plugin-cloud-reporter.git",
+      "homepage": "https://github.com/QANOT/qanot-plugin-cloud-reporter",
+      "tags": ["internal", "metrics", "cloud", "reporting"],
+      "min_qanot_version": "2.0.0"
+    }
+  ]
+}
