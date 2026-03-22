@@ -4,286 +4,298 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QanotHub — Plugin Marketplace for Qanot AI</title>
-<meta name="description" content="Discover, search and install plugins for Qanot AI — the Telegram bot agent framework for Uzbekistan market.">
+<meta name="description" content="Discover, search and install plugins for Qanot AI — the Telegram bot agent framework.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--surface3:#22222e;
-  --border:#2a2a3a;--border2:#3a3a4a;
-  --text:#e4e4ec;--text2:#9898a8;--text3:#686878;
-  --accent:#6c5ce7;--accent2:#a29bfe;--accent-glow:rgba(108,92,231,.15);
-  --green:#00b894;--green-bg:rgba(0,184,148,.08);
-  --red:#ff6b6b;--orange:#fdcb6e;
-  --radius:12px;--radius-sm:8px;
+  --sand:#f5f0e8;--sand-deep:#ebe4d6;--sand-dark:#d9cfc0;
+  --ink:#1a1612;--ink-soft:#3d3630;--ink-mute:#7a7068;--ink-faint:#a89e94;
+  --saffron:#d4770b;--saffron-light:#f0a830;--saffron-glow:rgba(212,119,11,.08);
+  --terra:#b85c38;--terra-light:#d07850;
+  --teal:#2d6a6a;--teal-light:#3d8a8a;
+  --cream:#faf7f2;--white:#fff;
+  --radius:6px;
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-body:'Outfit',system-ui,sans-serif;
+  --font-mono:'DM Mono','Menlo',monospace;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
-a{color:var(--accent2);text-decoration:none}
+body{font-family:var(--font-body);background:var(--cream);color:var(--ink);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:var(--saffron);text-decoration:none}
 a:hover{text-decoration:underline}
+::selection{background:var(--saffron-light);color:var(--white)}
 
-/* Header */
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-.header-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.5px}
-.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
-.logo span{color:var(--accent2)}
-.header-links{display:flex;gap:20px;font-size:14px}
-.header-links a{color:var(--text2)}
-.header-links a:hover{color:var(--text)}
+/* ═══ Noise texture overlay ═══ */
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
 
-/* Hero */
-.hero{text-align:center;padding:60px 24px 40px;max-width:700px;margin:0 auto}
-.hero h1{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;background:linear-gradient(135deg,var(--text),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{color:var(--text2);font-size:17px;margin-bottom:32px}
-.hero-stats{display:flex;justify-content:center;gap:40px;margin-bottom:32px}
-.stat{text-align:center}
-.stat-num{font-size:28px;font-weight:800;color:var(--accent2)}
-.stat-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+/* ═══ Geometric border pattern ═══ */
+.geo-border{height:4px;background:repeating-linear-gradient(90deg,var(--saffron) 0,var(--saffron) 12px,transparent 12px,transparent 16px,var(--terra) 16px,var(--terra) 28px,transparent 28px,transparent 32px,var(--teal) 32px,var(--teal) 44px,transparent 44px,transparent 48px)}
 
-/* Search */
-.search-wrap{max-width:560px;margin:0 auto;position:relative}
-.search-wrap input{width:100%;padding:14px 20px 14px 48px;background:var(--surface2);border:1px solid var(--border);border-radius:50px;color:var(--text);font-size:16px;outline:none;transition:border .2s,box-shadow .2s}
-.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-.search-wrap input::placeholder{color:var(--text3)}
-.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:18px;pointer-events:none}
+/* ═══ Header ═══ */
+.header{background:var(--ink);color:var(--sand);padding:0}
+.header-bar{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:var(--font-display);font-size:26px;color:var(--sand);display:flex;align-items:baseline;gap:2px;letter-spacing:-.5px}
+.logo em{font-style:italic;color:var(--saffron-light)}
+.logo-dot{color:var(--saffron);font-size:32px;line-height:0}
+.nav{display:flex;gap:24px;font-size:13px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
+.nav a{color:var(--ink-faint);transition:color .2s}
+.nav a:hover{color:var(--sand);text-decoration:none}
 
-/* Categories */
-.categories{max-width:1100px;margin:0 auto;padding:8px 24px 0;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.cat-btn{padding:7px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:50px;color:var(--text2);font-size:13px;cursor:pointer;transition:all .2s;user-select:none}
-.cat-btn:hover{border-color:var(--accent);color:var(--text)}
-.cat-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+/* ═══ Hero ═══ */
+.hero{background:var(--ink);color:var(--sand);padding:48px 32px 56px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top,var(--cream),transparent);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.hero-grid{display:grid;grid-template-columns:1fr 340px;gap:60px;align-items:end}
+.hero h1{font-family:var(--font-display);font-size:56px;font-weight:400;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px;color:var(--sand)}
+.hero h1 em{font-style:italic;color:var(--saffron-light)}
+.hero-sub{color:var(--ink-faint);font-size:16px;font-weight:300;max-width:500px;line-height:1.7}
 
-/* Grid */
-.grid-wrap{max-width:1100px;margin:0 auto;padding:32px 24px 60px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.no-results{text-align:center;padding:60px 20px;color:var(--text3);font-size:16px}
+/* Hero right — terminal card */
+.terminal{background:var(--ink-soft);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;font-family:var(--font-mono);font-size:13px}
+.terminal-bar{background:rgba(0,0,0,.3);padding:8px 14px;display:flex;gap:6px;align-items:center}
+.terminal-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15)}
+.terminal-dot:first-child{border-color:var(--terra-light)}
+.terminal-dot:nth-child(2){border-color:var(--saffron)}
+.terminal-dot:nth-child(3){border-color:var(--teal-light)}
+.terminal-title{margin-left:auto;font-size:11px;color:var(--ink-faint);font-family:var(--font-body);letter-spacing:.5px;text-transform:uppercase}
+.terminal-body{padding:16px 18px;line-height:2}
+.terminal-body .prompt{color:var(--saffron-light)}
+.terminal-body .cmd{color:var(--sand)}
+.terminal-body .out{color:var(--ink-faint)}
+.terminal-body .ok{color:var(--teal-light)}
 
-/* Card */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:border .2s,transform .15s,box-shadow .2s;cursor:default;display:flex;flex-direction:column}
-.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
-.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-.card-name{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px}
-.card-ver{font-size:12px;color:var(--text3);background:var(--surface3);padding:3px 10px;border-radius:50px;white-space:nowrap;flex-shrink:0}
-.card-desc{color:var(--text2);font-size:14px;margin-bottom:16px;flex:1}
-.card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.tag{font-size:11px;padding:3px 10px;background:var(--accent-glow);color:var(--accent2);border-radius:50px;border:1px solid rgba(108,92,231,.2)}
-.card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)}
-.card-author{display:flex;align-items:center;gap:4px}
+/* ═══ Search + Filter bar ═══ */
+.toolbar{max-width:1200px;margin:-28px auto 0;padding:0 32px;position:relative;z-index:2}
+.toolbar-inner{background:var(--white);border:1px solid var(--sand-dark);border-radius:var(--radius);padding:14px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 2px 20px rgba(26,22,18,.06);flex-wrap:wrap}
+.search-box{flex:1;min-width:220px;position:relative}
+.search-box input{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--sand-dark);border-radius:var(--radius);font-size:14px;font-family:var(--font-body);color:var(--ink);background:var(--cream);outline:none;transition:border .2s,box-shadow .2s}
+.search-box input:focus{border-color:var(--saffron);box-shadow:0 0 0 3px var(--saffron-glow)}
+.search-box input::placeholder{color:var(--ink-faint)}
+.search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-faint);width:18px;height:18px}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:6px 14px;border:1px solid var(--sand-dark);border-radius:var(--radius);font-size:12px;font-weight:500;color:var(--ink-mute);cursor:pointer;transition:all .15s;background:transparent;font-family:var(--font-body);letter-spacing:.2px}
+.pill:hover{border-color:var(--saffron);color:var(--ink)}
+.pill.active{background:var(--saffron);border-color:var(--saffron);color:var(--white)}
 
-/* Install button */
-.install-wrap{position:relative}
-.install-btn{padding:6px 14px;background:var(--green-bg);color:var(--green);border:1px solid rgba(0,184,148,.2);border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
-.install-btn:hover{background:var(--green);color:#fff;border-color:var(--green)}
-.install-btn.copied{background:var(--green);color:#fff}
-.tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface3);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:12px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;border:1px solid var(--border2);font-family:monospace}
-.tooltip.show{opacity:1}
+/* ═══ Stats ribbon ═══ */
+.stats{max-width:1200px;margin:0 auto;padding:20px 32px 0;display:flex;gap:32px;font-size:13px;color:var(--ink-mute)}
+.stats strong{color:var(--ink);font-weight:600}
 
-/* Footer */
-.footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--text3);font-size:13px}
-.footer a{color:var(--text2)}
+/* ═══ Grid ═══ */
+.grid-wrap{max-width:1200px;margin:0 auto;padding:24px 32px 80px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.no-results{text-align:center;padding:80px 20px;color:var(--ink-faint);font-size:15px}
+.no-results span{font-family:var(--font-display);font-style:italic;font-size:20px;display:block;margin-bottom:8px;color:var(--ink-mute)}
 
-/* Quick Install banner */
-.quick-install{max-width:1100px;margin:24px auto 0;padding:0 24px}
-.quick-install-inner{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.quick-install code{font-size:14px;color:var(--green);background:var(--surface);padding:6px 14px;border-radius:var(--radius-sm);border:1px solid var(--border)}
-.quick-install-text{color:var(--text2);font-size:14px}
+/* ═══ Card ═══ */
+.card{background:var(--white);border:1px solid var(--sand-dark);border-radius:var(--radius);padding:0;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column;overflow:hidden}
+.card:hover{border-color:var(--saffron);box-shadow:0 4px 24px rgba(26,22,18,.07)}
+.card-body{padding:22px 22px 0;flex:1}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.card-name{font-family:var(--font-mono);font-size:15px;font-weight:500;color:var(--ink);letter-spacing:-.3px}
+.card-name:hover{color:var(--saffron);text-decoration:none}
+.card-ver{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);padding:2px 8px;background:var(--sand);border-radius:3px;white-space:nowrap}
+.card-desc{color:var(--ink-mute);font-size:13px;line-height:1.6;margin-bottom:14px;font-weight:300}
+.card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.tag{font-size:11px;font-weight:500;padding:2px 9px;color:var(--teal);background:rgba(45,106,106,.06);border-radius:3px;letter-spacing:.3px}
+.card-foot{padding:12px 22px;background:var(--sand);display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--sand-dark)}
+.card-author{font-size:12px;color:var(--ink-mute);font-weight:400}
+.install-btn{font-family:var(--font-mono);font-size:12px;padding:6px 14px;background:var(--ink);color:var(--sand);border:none;border-radius:var(--radius);cursor:pointer;transition:background .15s,transform .1s;letter-spacing:.3px}
+.install-btn:hover{background:var(--saffron)}
+.install-btn:active{transform:scale(.97)}
+.install-btn.copied{background:var(--teal)}
 
-/* Responsive */
-@media(max-width:640px){
-  .hero h1{font-size:28px}
-  .hero-stats{gap:24px}
-  .stat-num{font-size:22px}
+/* ═══ Footer ═══ */
+.footer{border-top:1px solid var(--sand-dark);padding:40px 32px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-mute);flex-wrap:wrap;gap:16px}
+.footer a{color:var(--ink-soft)}
+.footer-right{display:flex;gap:20px}
+
+/* ═══ Animations ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .4s ease both}
+.card:nth-child(1){animation-delay:.05s}
+.card:nth-child(2){animation-delay:.1s}
+.card:nth-child(3){animation-delay:.15s}
+.card:nth-child(4){animation-delay:.2s}
+.card:nth-child(5){animation-delay:.25s}
+.card:nth-child(6){animation-delay:.3s}
+.card:nth-child(7){animation-delay:.35s}
+.card:nth-child(8){animation-delay:.4s}
+.card:nth-child(9){animation-delay:.45s}
+.card:nth-child(10){animation-delay:.5s}
+.card:nth-child(11){animation-delay:.55s}
+
+.hero h1,.hero-sub,.terminal{animation:fadeUp .5s ease both}
+.hero-sub{animation-delay:.1s}
+.terminal{animation-delay:.2s}
+.toolbar-inner{animation:fadeUp .4s ease both;animation-delay:.25s}
+
+/* ═══ Responsive ═══ */
+@media(max-width:800px){
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .hero h1{font-size:36px}
   .grid{grid-template-columns:1fr}
-  .header-inner{flex-direction:column;gap:12px}
-  .quick-install-inner{flex-direction:column;text-align:center}
+  .header-bar{flex-direction:column;gap:12px;text-align:center}
+  .nav{justify-content:center;flex-wrap:wrap;gap:16px}
+  .toolbar-inner{flex-direction:column}
+  .search-box{min-width:100%}
+  .filter-pills{justify-content:center}
+  .stats{flex-wrap:wrap;gap:16px}
+  .footer{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
 
+<div class="geo-border"></div>
 <header class="header">
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">Q</div>
-      Qanot<span>Hub</span>
-    </div>
-    <nav class="header-links">
+  <div class="header-bar">
+    <a href="index.html" class="logo">Qanot<em>Hub</em><span class="logo-dot">.</span></a>
+    <nav class="nav">
+      <a href="index.html">Plugins</a>
       <a href="https://github.com/QANOT/qanot">Framework</a>
-      <a href="https://github.com/QANOT/qanot-plugins">Registry</a>
-      <a href="submit.html">Submit Plugin</a>
+      <a href="https://github.com/QANOT/qanot-plugins">GitHub</a>
+      <a href="submit.html">Submit</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
-  <h1>Discover Plugins for Qanot AI</h1>
-  <p>The official plugin marketplace for the AI agent framework. Search, install, and extend your Telegram bot in seconds.</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num" id="pluginCount">0</div><div class="stat-label">Plugins</div></div>
-    <div class="stat"><div class="stat-num" id="categoryCount">0</div><div class="stat-label">Categories</div></div>
-    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Open Source</div></div>
-  </div>
-  <div class="search-wrap">
-    <span class="search-icon">&#x1F50D;</span>
-    <input type="text" id="search" placeholder="Search plugins... (crm, pos, sms, database)" autocomplete="off">
-  </div>
-</section>
-
-<div class="categories" id="categories"></div>
-
-<div class="quick-install">
-  <div class="quick-install-inner">
-    <span class="quick-install-text">Install any plugin with one command:</span>
-    <code>qanot plugin install &lt;name&gt;</code>
-  </div>
-</div>
-
-<section class="grid-wrap">
-  <div class="grid" id="grid"></div>
-  <div class="no-results" id="noResults" style="display:none">No plugins found matching your search.</div>
-</section>
-
-<footer class="footer">
-  <p>QanotHub &mdash; Plugin marketplace for <a href="https://github.com/QANOT/qanot">Qanot AI</a></p>
-  <p style="margin-top:8px">Every plugin is security-scanned on install. <a href="https://github.com/QANOT/qanot-plugins/blob/main/CONTRIBUTING.md">Submit yours</a></p>
-</footer>
-
-<script>
-const REGISTRY_URL = 'https://raw.githubusercontent.com/QANOT/qanot-plugins/main/index.json';
-
-const CATEGORY_MAP = {
-  'All': () => true,
-  'CRM': p => hasTag(p, ['crm', 'sales', 'leads', 'contacts']),
-  'POS / ERP': p => hasTag(p, ['pos', 'erp', 'inventory', 'warehouse']),
-  'HR': p => hasTag(p, ['hr', 'employees', 'payroll']),
-  'Messaging': p => hasTag(p, ['sms', 'notification', 'messaging']),
-  'Database': p => hasTag(p, ['database', 'sql', 'mysql']),
-  'Accounting': p => hasTag(p, ['1c', 'accounting', 'enterprise']),
-  'Internal': p => hasTag(p, ['internal', 'metrics', 'cloud']),
-};
-
-function hasTag(plugin, tags) {
-  const ptags = (plugin.tags || []).map(t => t.toLowerCase());
-  const desc = (plugin.description || '').toLowerCase();
-  return tags.some(t => ptags.includes(t) || desc.includes(t));
-}
-
-let allPlugins = [];
-let activeCategory = 'All';
-
-async function init() {
-  try {
-    const resp = await fetch(REGISTRY_URL);
-    const data = await resp.json();
-    allPlugins = data.plugins || [];
-  } catch (e) {
-    console.error('Failed to fetch registry:', e);
-    allPlugins = [];
-  }
-
-  document.getElementById('pluginCount').textContent = allPlugins.length;
-
-  // Build categories
-  const usedCats = Object.entries(CATEGORY_MAP).filter(([name, fn]) => {
-    return name === 'All' || allPlugins.some(fn);
-  });
-  document.getElementById('categoryCount').textContent = usedCats.length - 1;
-
-  const catEl = document.getElementById('categories');
-  usedCats.forEach(([name]) => {
-    const btn = document.createElement('div');
-    btn.className = 'cat-btn' + (name === 'All' ? ' active' : '');
-    btn.textContent = name;
-    btn.onclick = () => {
-      activeCategory = name;
-      catEl.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      render();
-    };
-    catEl.appendChild(btn);
-  });
-
-  // Search
-  document.getElementById('search').addEventListener('input', () => render());
-
-  render();
-}
-
-function render() {
-  const query = document.getElementById('search').value.toLowerCase().trim();
-  const grid = document.getElementById('grid');
-  const noResults = document.getElementById('noResults');
-
-  let filtered = allPlugins;
-
-  // Category filter
-  if (activeCategory !== 'All') {
-    filtered = filtered.filter(CATEGORY_MAP[activeCategory]);
-  }
-
-  // Search filter
-  if (query) {
-    filtered = filtered.filter(p => {
-      const searchable = [p.name, p.description, p.author, ...(p.tags || [])].join(' ').toLowerCase();
-      return searchable.includes(query);
-    });
-  }
-
-  grid.innerHTML = '';
-
-  if (filtered.length === 0) {
-    noResults.style.display = 'block';
-    return;
-  }
-  noResults.style.display = 'none';
-
-  filtered.forEach(p => {
-    grid.innerHTML += cardHTML(p);
-  });
-}
-
-function cardHTML(p) {
-  const tags = (p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('');
-  const repoUrl = p.homepage || p.git_url || '#';
-
-  return `
-    <div class="card">
-      <div class="card-head">
-        <a href="${esc(repoUrl)}" target="_blank" class="card-name">${esc(p.name)}</a>
-        <span class="card-ver">v${esc(p.version)}</span>
+  <div class="hero-inner">
+    <div class="hero-grid">
+      <div>
+        <h1>The plugin<br>marketplace for<br><em>Qanot AI</em></h1>
+        <p class="hero-sub">Extend your Telegram bot with integrations for CRM, POS, HR, SMS, and more. One command to install. Security-scanned by default.</p>
       </div>
-      <div class="card-desc">${esc(p.description)}</div>
-      <div class="card-tags">${tags}</div>
-      <div class="card-meta">
-        <div class="card-author">by ${esc(p.author || 'Unknown')}</div>
-        <div class="install-wrap">
-          <div class="tooltip" id="tip-${esc(p.name)}">qanot plugin install ${esc(p.name)}</div>
-          <button class="install-btn" onclick="copyInstall('${esc(p.name)}')">Install</button>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-dot"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$</span> <span class="cmd">qanot plugin search crm</span></div>
+          <div><span class="out">&nbsp; amocrm v1.0.0</span></div>
+          <div><span class="out">&nbsp; bitrix24 v1.0.0</span></div>
+          <div>&nbsp;</div>
+          <div><span class="prompt">$</span> <span class="cmd">qanot plugin install amocrm</span></div>
+          <div><span class="ok">&nbsp; OK installed to plugins/amocrm</span></div>
         </div>
       </div>
     </div>
-  `;
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search plugins by name, tag, or description..." autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filter-pills" id="categories"></div>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<section class="grid-wrap">
+  <div class="grid" id="grid"></div>
+  <div class="no-results" id="noResults" style="display:none">
+    <span>Nothing here yet.</span>
+    No plugins match your search. Try a different term or <a href="submit.html">submit your own</a>.
+  </div>
+</section>
+
+<footer class="footer">
+  <div>QanotHub &mdash; by <a href="https://github.com/QANOT">Qanot AI</a>. Every plugin is security-scanned on install.</div>
+  <div class="footer-right">
+    <a href="submit.html">Submit a plugin</a>
+    <a href="https://github.com/QANOT/qanot-plugins">Registry repo</a>
+  </div>
+</footer>
+
+<script>
+const REGISTRY_URL='https://raw.githubusercontent.com/QANOT/qanot-plugins/main/index.json';
+const CATS={
+  'All':()=>true,
+  'CRM':p=>ht(p,['crm','sales','leads','contacts']),
+  'POS / ERP':p=>ht(p,['pos','erp','inventory','warehouse','market']),
+  'HR':p=>ht(p,['hr','employees','payroll','attendance']),
+  'Messaging':p=>ht(p,['sms','notification','messaging']),
+  'Database':p=>ht(p,['database','sql','mysql','query']),
+  'Accounting':p=>ht(p,['1c','accounting','enterprise']),
+  'Internal':p=>ht(p,['internal','metrics','cloud','reporting']),
+};
+function ht(p,tags){const pt=(p.tags||[]).map(t=>t.toLowerCase()),d=(p.description||'').toLowerCase();return tags.some(t=>pt.includes(t)||d.includes(t))}
+
+let plugins=[],activeCat='All';
+
+async function init(){
+  try{const r=await fetch(REGISTRY_URL);const d=await r.json();plugins=d.plugins||[]}catch(e){plugins=[]}
+
+  const usedCats=Object.entries(CATS).filter(([n,fn])=>n==='All'||plugins.some(fn));
+  const catEl=document.getElementById('categories');
+  usedCats.forEach(([name])=>{
+    const b=document.createElement('button');
+    b.className='pill'+(name==='All'?' active':'');
+    b.textContent=name;
+    b.onclick=()=>{activeCat=name;catEl.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()};
+    catEl.appendChild(b);
+  });
+
+  document.getElementById('search').addEventListener('input',()=>render());
+  render();
 }
 
-function copyInstall(name) {
-  const cmd = `qanot plugin install ${name}`;
-  navigator.clipboard.writeText(cmd).then(() => {
-    const tip = document.getElementById('tip-' + name);
-    if (tip) {
-      tip.textContent = 'Copied!';
-      tip.classList.add('show');
-      setTimeout(() => {
-        tip.classList.remove('show');
-        tip.textContent = `qanot plugin install ${name}`;
-      }, 1500);
-    }
+function render(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  const grid=document.getElementById('grid');
+  const nr=document.getElementById('noResults');
+  const stats=document.getElementById('stats');
+
+  let f=plugins;
+  if(activeCat!=='All')f=f.filter(CATS[activeCat]);
+  if(q)f=f.filter(p=>[p.name,p.description,p.author,...(p.tags||[])].join(' ').toLowerCase().includes(q));
+
+  stats.innerHTML=`<span><strong>${f.length}</strong> plugin${f.length!==1?'s':''}</span><span><strong>${Object.keys(CATS).length-1}</strong> categories</span><span>All open source</span>`;
+
+  if(!f.length){grid.innerHTML='';nr.style.display='block';return}
+  nr.style.display='none';
+  grid.innerHTML=f.map((p,i)=>card(p,i)).join('');
+}
+
+function card(p,i){
+  const tags=(p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  const url=p.homepage||p.git_url||'#';
+  const delay=Math.min(i*.05,.55);
+  return`<div class="card" style="animation-delay:${delay}s">
+    <div class="card-body">
+      <div class="card-top">
+        <a href="${esc(url)}" target="_blank" class="card-name">${esc(p.name)}</a>
+        <span class="card-ver">${esc(p.version)}</span>
+      </div>
+      <div class="card-desc">${esc(p.description)}</div>
+      <div class="card-tags">${tags}</div>
+    </div>
+    <div class="card-foot">
+      <span class="card-author">${esc(p.author||'Unknown')}</span>
+      <button class="install-btn" onclick="cpInstall(this,'${esc(p.name)}')" title="Copy install command">$ install ${esc(p.name)}</button>
+    </div>
+  </div>`;
+}
+
+function cpInstall(btn,name){
+  navigator.clipboard.writeText('qanot plugin install '+name).then(()=>{
+    btn.textContent='copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='$ install '+name;btn.classList.remove('copied')},1400);
   });
 }
 
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s || '';
-  return d.innerHTML;
-}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
 init();
 </script>
