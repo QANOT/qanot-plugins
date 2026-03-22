@@ -37,6 +37,10 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;point
 .nav{display:flex;gap:24px;font-size:13px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
 .nav a{color:var(--ink-faint);transition:color .2s}
 .nav a:hover{color:var(--sand);text-decoration:none}
+.lang-sw{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;margin-left:8px}
+.lang-sw button{background:none;border:none;color:var(--ink-faint);font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;font-family:var(--font-body);letter-spacing:.5px;transition:all .15s}
+.lang-sw button:hover{color:var(--sand)}
+.lang-sw button.active{background:var(--saffron);color:var(--white)}
 
 /* Page title area */
 .page-hero{background:var(--ink);color:var(--sand);padding:40px 32px 60px}
@@ -115,14 +119,19 @@ pre .cm{color:var(--ink-faint)}
       <a href="index.html">Plugins</a>
       <a href="https://github.com/QANOT/qanot">Framework</a>
       <a href="https://github.com/QANOT/qanot-plugins">GitHub</a>
+      <div class="lang-sw">
+        <button onclick="setLang('uz')" class="active">UZ</button>
+        <button onclick="setLang('en')">EN</button>
+        <button onclick="setLang('ru')">RU</button>
+      </div>
     </nav>
   </div>
 </header>
 
 <section class="page-hero">
   <div class="page-hero-inner">
-    <h1>Submit a <em>plugin</em></h1>
-    <p>Share your integration with the Qanot AI community. All submissions are security-reviewed before inclusion in the registry.</p>
+    <h1 data-i18n="s_title">Plagin <em>yuborish</em></h1>
+    <p data-i18n="s_subtitle">Integratsiyangizni Qanot AI hamjamiyati bilan ulashing. Barcha yuborilganlar xavfsizlik tekshiruvidan o'tkaziladi.</p>
   </div>
 </section>
 
@@ -131,7 +140,7 @@ pre .cm{color:var(--ink-faint)}
   <div class="step">
     <div class="step-head">
       <span class="step-num">1</span>
-      <span class="step-title">Create your plugin repo</span>
+      <span class="step-title" data-i18n="s_step1">Plagin repozitoriyasini yarating</span>
     </div>
     <div class="step-body">
       <p>Your repo should follow this structure:</p>
@@ -154,7 +163,7 @@ pre .cm{color:var(--ink-faint)}
   <div class="step">
     <div class="step-head">
       <span class="step-num">2</span>
-      <span class="step-title">Test locally</span>
+      <span class="step-title" data-i18n="s_step2">Lokal tekshiring</span>
     </div>
     <div class="step-body">
 <pre><span class="cm"># install from your repo</span>
@@ -171,13 +180,13 @@ pre .cm{color:var(--ink-faint)}
   <div class="step">
     <div class="step-head">
       <span class="step-num">3</span>
-      <span class="step-title">Submit for review</span>
+      <span class="step-title" data-i18n="s_step3">Ko'rib chiqishga yuboring</span>
     </div>
     <div class="step-body">
       <p><strong>Option A:</strong> Fork <a href="https://github.com/QANOT/qanot-plugins">QANOT/qanot-plugins</a>, add your entry to <code>index.json</code>, open a PR.</p>
       <p><strong>Option B:</strong> Use the quick form below — it creates a GitHub Issue for review.</p>
       <div class="security">
-        <div class="security-title">Security Requirements</div>
+        <div class="security-title" data-i18n="s_security_title">Xavfsizlik talablari</div>
         <ul>
           <li>No <code>install.sh</code>, <code>.exe</code>, <code>.bat</code>, or shell scripts</li>
           <li>No <code>eval()</code>, <code>exec()</code>, <code>os.system()</code></li>
@@ -190,8 +199,8 @@ pre .cm{color:var(--ink-faint)}
   </div>
 
   <div class="form-card">
-    <div class="form-title">Quick submit</div>
-    <div class="form-sub">Fill in your plugin details. Opens a GitHub Issue for review.</div>
+    <div class="form-title" data-i18n="s_form_title">Tezkor yuborish</div>
+    <div class="form-sub" data-i18n="s_form_sub">Plagin ma'lumotlarini to'ldiring. GitHub Issue yaratiladi.</div>
 
     <form id="submitForm" onsubmit="submitPlugin(event)">
       <div class="field-row">
@@ -243,7 +252,7 @@ pre .cm{color:var(--ink-faint)}
         <div class="hint">comma-separated, helps discovery</div>
       </div>
 
-      <button type="submit" class="submit-btn">Submit for review</button>
+      <button type="submit" class="submit-btn" data-i18n="s_submit_btn">Ko'rib chiqishga yuborish</button>
     </form>
 
     <div class="result" id="result"></div>
@@ -255,6 +264,43 @@ pre .cm{color:var(--ink-faint)}
 </footer>
 
 <script>
+const I18N_S={
+  uz:{
+    s_title:'Plagin <em>yuborish</em>',
+    s_subtitle:'Integratsiyangizni Qanot AI hamjamiyati bilan ulashing. Barcha yuborilganlar xavfsizlik tekshiruvidan o\'tkaziladi.',
+    s_step1:'Plagin repozitoriyasini yarating',s_step2:'Lokal tekshiring',s_step3:'Ko\'rib chiqishga yuboring',
+    s_form_title:'Tezkor yuborish',s_form_sub:'Plagin ma\'lumotlarini to\'ldiring. GitHub Issue yaratiladi.',
+    s_submit_btn:'Ko\'rib chiqishga yuborish',s_security_title:'Xavfsizlik talablari',
+  },
+  en:{
+    s_title:'Submit a <em>plugin</em>',
+    s_subtitle:'Share your integration with the Qanot AI community. All submissions are security-reviewed before inclusion in the registry.',
+    s_step1:'Create your plugin repo',s_step2:'Test locally',s_step3:'Submit for review',
+    s_form_title:'Quick submit',s_form_sub:'Fill in your plugin details. Opens a GitHub Issue for review.',
+    s_submit_btn:'Submit for review',s_security_title:'Security Requirements',
+  },
+  ru:{
+    s_title:'Добавить <em>плагин</em>',
+    s_subtitle:'Поделитесь интеграцией с сообществом Qanot AI. Все заявки проходят проверку безопасности.',
+    s_step1:'Создайте репозиторий плагина',s_step2:'Протестируйте локально',s_step3:'Отправьте на рассмотрение',
+    s_form_title:'Быстрая подача',s_form_sub:'Заполните данные плагина. Будет создан GitHub Issue.',
+    s_submit_btn:'Отправить на рассмотрение',s_security_title:'Требования безопасности',
+  }
+};
+let curLang=localStorage.getItem('qh_lang')||'uz';
+function setLang(lang){
+  curLang=lang;localStorage.setItem('qh_lang',lang);
+  document.querySelectorAll('.lang-sw button').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(I18N_S[lang]&&I18N_S[lang][k])el.innerHTML=I18N_S[lang][k];
+  });
+}
+(function(){
+  document.querySelectorAll('.lang-sw button').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
+  setLang(curLang);
+})();
+
 function submitPlugin(e){
   e.preventDefault();
   const n=document.getElementById('f_name').value.trim();
