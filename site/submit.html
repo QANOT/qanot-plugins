@@ -111,9 +111,10 @@ pre .cm{color:rgba(240,240,245,0.4)}
   <div class="header-bar">
     <a href="index.html" class="logo">Qanot<em>Hub</em><span class="logo-dot">.</span></a>
     <nav class="nav">
-      <a href="index.html">Plugins</a>
+      <a href="index.html" data-i18n="nav_plugins">Plaginlar</a>
       <a href="https://github.com/QANOT/qanot">Framework</a>
       <a href="https://github.com/QANOT/qanot-plugins">GitHub</a>
+      <a href="submit.html" data-i18n="nav_submit">Yuborish</a>
       <div class="lang-sw">
         <button onclick="setLang('uz')" class="active">UZ</button>
         <button onclick="setLang('en')">EN</button>
@@ -261,6 +262,7 @@ pre .cm{color:rgba(240,240,245,0.4)}
 <script>
 const I18N_S={
   uz:{
+    nav_plugins:'Plaginlar',nav_submit:'Yuborish',
     s_title:'Plagin <em>yuborish</em>',
     s_subtitle:'Integratsiyangizni Qanot AI hamjamiyati bilan ulashing. Barcha yuborilganlar xavfsizlik tekshiruvidan o\'tkaziladi.',
     s_step1:'Plagin repozitoriyasini yarating',s_step2:'Lokal tekshiring',s_step3:'Ko\'rib chiqishga yuboring',
@@ -268,6 +270,7 @@ const I18N_S={
     s_submit_btn:'Ko\'rib chiqishga yuborish',s_security_title:'Xavfsizlik talablari',
   },
   en:{
+    nav_plugins:'Plugins',nav_submit:'Submit',
     s_title:'Submit a <em>plugin</em>',
     s_subtitle:'Share your integration with the Qanot AI community. All submissions are security-reviewed before inclusion in the registry.',
     s_step1:'Create your plugin repo',s_step2:'Test locally',s_step3:'Submit for review',
@@ -275,6 +278,7 @@ const I18N_S={
     s_submit_btn:'Submit for review',s_security_title:'Security Requirements',
   },
   ru:{
+    nav_plugins:'Плагины',nav_submit:'Добавить',
     s_title:'Добавить <em>плагин</em>',
     s_subtitle:'Поделитесь интеграцией с сообществом Qanot AI. Все заявки проходят проверку безопасности.',
     s_step1:'Создайте репозиторий плагина',s_step2:'Протестируйте локально',s_step3:'Отправьте на рассмотрение',
