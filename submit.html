@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit Plugin — QanotHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#fafafa;--bg-dark:#0a0f1a;--bg-card:#111827;
+  --ink:#111;--ink-secondary:#555;--ink-muted:#999;
+  --border:rgba(0,0,0,0.07);
+  --blue:#2563eb;--blue-soft:rgba(37,99,235,0.08);--blue-glow:rgba(37,99,235,0.25);
+  --green:#10b981;--green-soft:rgba(16,185,129,0.08);
+  --white:#fff;
+  --radius:10px;--radius-sm:8px;
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-mono:'DM Mono','Menlo',monospace;
+}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:var(--blue);color:var(--white)}
+
+.header{position:sticky;top:0;z-index:100;padding:16px 0;background:rgba(250,250,250,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.header-bar{max-width:1100px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:var(--font-display);font-size:26px;color:var(--ink);display:flex;align-items:baseline;gap:1px;letter-spacing:-.5px}
+.logo em{font-style:italic;color:var(--ink)}
+.logo-dot{color:var(--blue);font-size:32px;line-height:0}
+.nav{display:flex;gap:24px;font-size:14px;font-weight:500;align-items:center}
+.nav a{color:var(--ink-secondary);transition:color .2s}
+.nav a:hover{color:var(--ink);text-decoration:none}
+.lang-sw{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-left:8px}
+.lang-sw button{background:none;border:none;color:var(--ink-muted);font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;font-family:var(--font-body);letter-spacing:.5px;transition:all .15s}
+.lang-sw button:hover{color:var(--ink)}
+.lang-sw button.active{background:var(--blue);color:var(--white)}
+
+/* Page title area */
+.page-hero{background:var(--bg-dark);color:#f0f0f5;padding:40px 32px 60px}
+.page-hero-inner{max-width:760px;margin:0 auto}
+.page-hero h1{font-family:var(--font-display);font-size:44px;font-weight:400;line-height:1.1;letter-spacing:-1px;margin-bottom:12px}
+.page-hero h1 em{font-style:italic;color:var(--blue)}
+.page-hero p{color:rgba(240,240,245,0.55);font-size:16px;max-width:520px;line-height:1.7}
+
+.content{max-width:760px;margin:-32px auto 0;padding:0 32px 80px;position:relative;z-index:1}
+
+/* Steps */
+.step{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;animation:fadeUp .4s ease both}
+.step:nth-child(1){animation-delay:.1s}
+.step:nth-child(2){animation-delay:.15s}
+.step:nth-child(3){animation-delay:.2s}
+.step-head{padding:20px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border)}
+.step-num{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--white);background:var(--blue);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-size:16px;font-weight:600;letter-spacing:-.2px}
+.step-body{padding:20px 24px}
+.step-body p,.step-body li{color:var(--ink-secondary);font-size:14px;margin-bottom:8px}
+.step-body ul{padding-left:18px}
+.step-body strong{color:var(--ink);font-weight:600}
+.step-body code{font-family:var(--font-mono);font-size:12px;background:var(--blue-soft);padding:2px 7px;border-radius:4px;color:var(--blue)}
+pre{font-family:var(--font-mono);background:var(--bg-dark);color:#f0f0f5;border-radius:var(--radius);padding:16px 20px;overflow-x:auto;font-size:12px;line-height:1.8;margin:12px 0}
+pre .hl{color:var(--blue)}
+pre .cm{color:rgba(240,240,245,0.4)}
+
+/* Security callout */
+.security{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 20px;margin-top:12px}
+.security-title{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.security ul{list-style:none;padding:0}
+.security li{font-size:13px;color:var(--ink-secondary);padding:3px 0}
+.security li::before{content:'// ';font-family:var(--font-mono);color:var(--ink-muted);font-size:11px}
+
+/* Form */
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-top:32px;animation:fadeUp .4s ease both;animation-delay:.3s}
+.form-title{font-family:var(--font-display);font-size:28px;margin-bottom:4px}
+.form-sub{color:var(--ink-secondary);font-size:14px;margin-bottom:24px}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.field input,.field textarea,.field select{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--ink);font-size:14px;font-family:var(--font-body);outline:none;transition:border .2s,box-shadow .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.field textarea{min-height:90px;resize:vertical;line-height:1.5}
+.field .hint{font-size:11px;color:var(--ink-muted);margin-top:3px;font-family:var(--font-mono)}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.submit-btn{width:100%;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:all .2s;letter-spacing:.3px;margin-top:8px;box-shadow:0 2px 12px var(--blue-glow)}
+.submit-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 4px 20px var(--blue-glow)}
+.submit-btn:active{transform:scale(.98)}
+
+.result{margin-top:16px;padding:14px 16px;border-radius:var(--radius-sm);display:none;font-size:14px}
+.result.success{display:block;background:var(--green-soft);border:1px solid rgba(16,185,129,.15);color:var(--green)}
+.result.error{display:block;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);color:#ef4444}
+
+.footer{border-top:1px solid var(--border);padding:40px 32px;max-width:760px;margin:0 auto;text-align:center;font-size:13px;color:var(--ink-muted)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){
+  .page-hero h1{font-size:30px}
+  .header-bar{flex-direction:column;gap:12px;text-align:center}
+  .nav{justify-content:center;flex-wrap:wrap;gap:16px}
+  .field-row{grid-template-columns:1fr}
+  .content{padding:0 20px 60px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-bar">
+    <a href="index.html" class="logo">Qanot<em>Hub</em><span class="logo-dot">.</span></a>
+    <nav class="nav">
+      <a href="index.html" data-i18n="nav_plugins">Plaginlar</a>
+      <a href="https://github.com/QANOT/qanot">Framework</a>
+      <a href="https://github.com/QANOT/qanot-plugins">GitHub</a>
+      <a href="submit.html" data-i18n="nav_submit">Yuborish</a>
+      <div class="lang-sw">
+        <button onclick="setLang('uz')" class="active">UZ</button>
+        <button onclick="setLang('en')">EN</button>
+        <button onclick="setLang('ru')">RU</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <h1 data-i18n="s_title">Plagin <em>yuborish</em></h1>
+    <p data-i18n="s_subtitle">Integratsiyangizni Qanot AI hamjamiyati bilan ulashing. Barcha yuborilganlar xavfsizlik tekshiruvidan o'tkaziladi.</p>
+  </div>
+</section>
+
+<div class="content">
+
+  <div class="step">
+    <div class="step-head">
+      <span class="step-num">1</span>
+      <span class="step-title" data-i18n="s_step1">Plagin repozitoriyasini yarating</span>
+    </div>
+    <div class="step-body">
+      <p>Your repo should follow this structure:</p>
+<pre><span class="hl">qanot-plugin-your-name/</span>
+  plugin.json      <span class="cm"># manifest</span>
+  plugin.py        <span class="cm"># QanotPlugin class</span>
+  README.md        <span class="cm"># usage docs</span></pre>
+      <p>Example <code>plugin.json</code>:</p>
+<pre>{
+  <span class="hl">"name"</span>: "your_plugin",
+  <span class="hl">"version"</span>: "1.0.0",
+  <span class="hl">"description"</span>: "What your plugin does",
+  <span class="hl">"author"</span>: "Your Name",
+  <span class="hl">"dependencies"</span>: ["aiohttp"],
+  <span class="hl">"required_config"</span>: ["api_key"]
+}</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-head">
+      <span class="step-num">2</span>
+      <span class="step-title" data-i18n="s_step2">Lokal tekshiring</span>
+    </div>
+    <div class="step-body">
+<pre><span class="cm"># install from your repo</span>
+<span class="hl">$</span> qanot plugin install https://github.com/you/qanot-plugin-name.git
+
+<span class="cm"># security scan</span>
+<span class="hl">$</span> qanot plugin scan your_name
+
+<span class="cm"># run the bot</span>
+<span class="hl">$</span> qanot start</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-head">
+      <span class="step-num">3</span>
+      <span class="step-title" data-i18n="s_step3">Ko'rib chiqishga yuboring</span>
+    </div>
+    <div class="step-body">
+      <p><strong>Option A:</strong> Fork <a href="https://github.com/QANOT/qanot-plugins">QANOT/qanot-plugins</a>, add your entry to <code>index.json</code>, open a PR.</p>
+      <p><strong>Option B:</strong> Use the quick form below — it creates a GitHub Issue for review.</p>
+      <div class="security">
+        <div class="security-title" data-i18n="s_security_title">Xavfsizlik talablari</div>
+        <ul>
+          <li>No <code>install.sh</code>, <code>.exe</code>, <code>.bat</code>, or shell scripts</li>
+          <li>No <code>eval()</code>, <code>exec()</code>, <code>os.system()</code></li>
+          <li>No embedded secrets or <code>.env</code> files</li>
+          <li>Dependencies from approved allowlist only</li>
+          <li>HTTPS git URLs only</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-title" data-i18n="s_form_title">Tezkor yuborish</div>
+    <div class="form-sub" data-i18n="s_form_sub">Plagin ma'lumotlarini to'ldiring. GitHub Issue yaratiladi.</div>
+
+    <form id="submitForm" onsubmit="submitPlugin(event)">
+      <div class="field-row">
+        <div class="field">
+          <label>Plugin name</label>
+          <input type="text" id="f_name" placeholder="my_plugin" required pattern="[a-z][a-z0-9_]{0,63}">
+          <div class="hint">lowercase, underscores, max 64</div>
+        </div>
+        <div class="field">
+          <label>Version</label>
+          <input type="text" id="f_version" placeholder="1.0.0" value="1.0.0" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Git repository URL</label>
+        <input type="url" id="f_git" placeholder="https://github.com/you/qanot-plugin-name" required>
+        <div class="hint">must be https</div>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea id="f_desc" placeholder="What does your plugin do? Be specific." required></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Author</label>
+          <input type="text" id="f_author" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="f_category">
+            <option value="crm">CRM / Sales</option>
+            <option value="pos">POS / ERP</option>
+            <option value="hr">HR / Employees</option>
+            <option value="messaging">Messaging / SMS</option>
+            <option value="database">Database</option>
+            <option value="accounting">Accounting</option>
+            <option value="utility">Utility</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Tags</label>
+        <input type="text" id="f_tags" placeholder="crm, sales, integration">
+        <div class="hint">comma-separated, helps discovery</div>
+      </div>
+
+      <button type="submit" class="submit-btn" data-i18n="s_submit_btn">Ko'rib chiqishga yuborish</button>
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  QanotHub &mdash; <a href="https://github.com/QANOT/qanot">Qanot AI</a>
+</footer>
+
+<script>
+const I18N_S={
+  uz:{
+    nav_plugins:'Plaginlar',nav_submit:'Yuborish',
+    s_title:'Plagin <em>yuborish</em>',
+    s_subtitle:'Integratsiyangizni Qanot AI hamjamiyati bilan ulashing. Barcha yuborilganlar xavfsizlik tekshiruvidan o\'tkaziladi.',
+    s_step1:'Plagin repozitoriyasini yarating',s_step2:'Lokal tekshiring',s_step3:'Ko\'rib chiqishga yuboring',
+    s_form_title:'Tezkor yuborish',s_form_sub:'Plagin ma\'lumotlarini to\'ldiring. GitHub Issue yaratiladi.',
+    s_submit_btn:'Ko\'rib chiqishga yuborish',s_security_title:'Xavfsizlik talablari',
+  },
+  en:{
+    nav_plugins:'Plugins',nav_submit:'Submit',
+    s_title:'Submit a <em>plugin</em>',
+    s_subtitle:'Share your integration with the Qanot AI community. All submissions are security-reviewed before inclusion in the registry.',
+    s_step1:'Create your plugin repo',s_step2:'Test locally',s_step3:'Submit for review',
+    s_form_title:'Quick submit',s_form_sub:'Fill in your plugin details. Opens a GitHub Issue for review.',
+    s_submit_btn:'Submit for review',s_security_title:'Security Requirements',
+  },
+  ru:{
+    nav_plugins:'Плагины',nav_submit:'Добавить',
+    s_title:'Добавить <em>плагин</em>',
+    s_subtitle:'Поделитесь интеграцией с сообществом Qanot AI. Все заявки проходят проверку безопасности.',
+    s_step1:'Создайте репозиторий плагина',s_step2:'Протестируйте локально',s_step3:'Отправьте на рассмотрение',
+    s_form_title:'Быстрая подача',s_form_sub:'Заполните данные плагина. Будет создан GitHub Issue.',
+    s_submit_btn:'Отправить на рассмотрение',s_security_title:'Требования безопасности',
+  }
+};
+let curLang=localStorage.getItem('qh_lang')||'uz';
+function setLang(lang){
+  curLang=lang;localStorage.setItem('qh_lang',lang);
+  document.querySelectorAll('.lang-sw button').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(I18N_S[lang]&&I18N_S[lang][k])el.innerHTML=I18N_S[lang][k];
+  });
+}
+(function(){
+  document.querySelectorAll('.lang-sw button').forEach(b=>b.classList.toggle('active',b.textContent===curLang.toUpperCase()));
+  setLang(curLang);
+})();
+
+function submitPlugin(e){
+  e.preventDefault();
+  const n=document.getElementById('f_name').value.trim();
+  const g=document.getElementById('f_git').value.trim();
+  const v=document.getElementById('f_version').value.trim();
+  const d=document.getElementById('f_desc').value.trim();
+  const a=document.getElementById('f_author').value.trim();
+  const t=document.getElementById('f_tags').value.trim();
+  const c=document.getElementById('f_category').value;
+  const r=document.getElementById('result');
+  if(!g.startsWith('https://')){r.className='result error';r.textContent='Git URL must use HTTPS.';return}
+  if(!/^[a-z][a-z0-9_]{0,63}$/.test(n)){r.className='result error';r.textContent='Invalid plugin name.';return}
+  const tags=t?t.split(',').map(x=>x.trim()).filter(Boolean):[c];
+  const title=encodeURIComponent(`[Plugin Submission] ${n} v${v}`);
+  const body=encodeURIComponent(`## Plugin Submission\n\n**Name:** ${n}\n**Version:** ${v}\n**Author:** ${a}\n**Git URL:** ${g}\n**Category:** ${c}\n**Tags:** ${tags.join(', ')}\n\n**Description:**\n${d}\n\n---\n\n### index.json entry\n\n\`\`\`json\n${JSON.stringify({name:n,version:v,description:d,author:a,git_url:g,homepage:g.replace('.git',''),tags,min_qanot_version:"2.0.0"},null,2)}\n\`\`\`\n\n### Checklist\n- [ ] plugin.py with QanotPlugin class\n- [ ] plugin.json manifest\n- [ ] No install.sh or shell scripts\n- [ ] No eval/exec/os.system\n- [ ] HTTPS git URL\n- [ ] Dependencies on allowlist`);
+  const url=`https://github.com/QANOT/qanot-plugins/issues/new?title=${title}&body=${body}&labels=plugin-submission`;
+  r.className='result success';r.innerHTML='Opening GitHub...';
+  setTimeout(()=>{window.open(url,'_blank');r.innerHTML=`Issue created. <a href="${url}" target="_blank">View on GitHub</a>`},400);
+}
+</script>
+</body>
+</html>
