@@ -80,6 +80,17 @@ a:hover{text-decoration:underline}
 .pill:hover{border-color:var(--blue);color:var(--ink)}
 .pill.active{background:var(--blue);border-color:var(--blue);color:var(--white)}
 
+/* ═══ Mode tabs (Plugins / Skills) ═══ */
+.mode-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.mode-tabs button{background:none;border:none;color:var(--ink-secondary);font-size:13px;font-weight:600;padding:9px 18px;cursor:pointer;font-family:var(--font-body);transition:all .15s;white-space:nowrap}
+.mode-tabs button:hover{color:var(--ink)}
+.mode-tabs button.active{background:var(--blue);color:var(--white)}
+/* tier badge on skill cards */
+.tier{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;letter-spacing:.4px;text-transform:uppercase}
+.tier-official{background:var(--green-soft);color:var(--green)}
+.tier-community{background:var(--blue-soft);color:var(--blue)}
+.tier-unverified{background:rgba(245,158,11,.1);color:#d97706}
+
 /* ═══ Stats ribbon ═══ */
 .stats{max-width:1100px;margin:0 auto;padding:20px 32px 0;display:flex;gap:32px;font-size:13px;color:var(--ink-muted)}
 .stats strong{color:var(--ink);font-weight:600}
@@ -197,6 +208,10 @@ a:hover{text-decoration:underline}
 
 <div class="toolbar">
   <div class="toolbar-inner">
+    <div class="mode-tabs">
+      <button id="modePlugins" class="active" onclick="setMode('plugins')" data-i18n="mode_plugins">Plaginlar</button>
+      <button id="modeSkills" onclick="setMode('skills')" data-i18n="mode_skills">Skill'lar</button>
+    </div>
     <div class="search-box">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input type="text" id="search" data-i18n-placeholder="search_placeholder" placeholder="Plagin nomi, teg yoki tavsif bo'yicha qidiring..." autocomplete="off" spellcheck="false">
@@ -225,6 +240,7 @@ a:hover{text-decoration:underline}
 
 <script>
 const REGISTRY_URL='https://raw.githubusercontent.com/QANOT/qanot-plugins/main/index.json';
+const SKILLS_REGISTRY_URL='https://raw.githubusercontent.com/QANOT/qanot-skills/main/index.json';
 
 // ═══ i18n ═══
 const I18N={
@@ -238,6 +254,11 @@ const I18N={
     footer_submit:'Plagin yuborish',footer_registry:'Reestr',
     stats_plugins:'plagin',stats_categories:'kategoriya',stats_opensource:'Hammasi ochiq kodli',
     cat_All:'Barchasi',cat_CRM:'CRM',cat_POS:'POS / ERP',cat_HR:'HR',cat_Messaging:'Xabar',cat_Database:'Ma\'lumotlar bazasi',cat_Accounting:'Buxgalteriya',cat_Internal:'Ichki',
+    mode_plugins:'Plaginlar',mode_skills:'Skill\'lar',
+    skills_search_placeholder:'Skill nomi, teg yoki tavsif bo\'yicha qidiring...',
+    stats_skills:'skill',
+    no_results_skills:'<span>Hech narsa topilmadi.</span>Qidiruv bo\'yicha skill topilmadi. <a href="https://github.com/QANOT/qanot-skills">O\'zingiznikini yuboring</a>.',
+    scat_All:'Barchasi',scat_Finance:'Moliya',scat_Business:'Biznes',scat_Legal:'Yuridik',scat_Other:'Boshqa',
   },
   en:{
     nav_plugins:'Plugins',nav_submit:'Submit',
@@ -249,6 +270,11 @@ const I18N={
     footer_submit:'Submit a plugin',footer_registry:'Registry',
     stats_plugins:'plugin',stats_categories:'categories',stats_opensource:'All open source',
     cat_All:'All',cat_CRM:'CRM',cat_POS:'POS / ERP',cat_HR:'HR',cat_Messaging:'Messaging',cat_Database:'Database',cat_Accounting:'Accounting',cat_Internal:'Internal',
+    mode_plugins:'Plugins',mode_skills:'Skills',
+    skills_search_placeholder:'Search skills by name, tag, or description...',
+    stats_skills:'skills',
+    no_results_skills:'<span>Nothing here yet.</span>No skills match your search. <a href="https://github.com/QANOT/qanot-skills">Submit your own</a>.',
+    scat_All:'All',scat_Finance:'Finance',scat_Business:'Business',scat_Legal:'Legal',scat_Other:'Other',
   },
   ru:{
     nav_plugins:'Плагины',nav_submit:'Добавить',
@@ -260,6 +286,11 @@ const I18N={
     footer_submit:'Добавить плагин',footer_registry:'Реестр',
     stats_plugins:'плагин',stats_categories:'категории',stats_opensource:'Всё с открытым кодом',
     cat_All:'Все',cat_CRM:'CRM',cat_POS:'POS / ERP',cat_HR:'HR',cat_Messaging:'Сообщения',cat_Database:'Базы данных',cat_Accounting:'Бухгалтерия',cat_Internal:'Внутренние',
+    mode_plugins:'Плагины',mode_skills:'Навыки',
+    skills_search_placeholder:'Поиск навыков по названию, тегу или описанию...',
+    stats_skills:'навыки',
+    no_results_skills:'<span>Ничего не найдено.</span>Навыки не найдены. <a href="https://github.com/QANOT/qanot-skills">Добавьте свой</a>.',
+    scat_All:'Все',scat_Finance:'Финансы',scat_Business:'Бизнес',scat_Legal:'Юридические',scat_Other:'Другое',
   }
 };
 
@@ -279,6 +310,10 @@ function setLang(lang){
     const key=el.getAttribute('data-i18n-placeholder');
     if(I18N[lang]&&I18N[lang][key])el.placeholder=I18N[lang][key];
   });
+  // Keep the search placeholder in sync with the active mode.
+  const sb=document.getElementById('search');
+  if(sb&&typeof mode!=='undefined')
+    sb.placeholder=t(mode==='skills'?'skills_search_placeholder':'search_placeholder');
   // Rebuild categories and re-render
   buildCategories();
   render();
@@ -298,14 +333,42 @@ const CATS_DEF={
   'Accounting':{fn:p=>ht(p,['1c','accounting','enterprise']),i18n:'cat_Accounting'},
   'Internal':{fn:p=>ht(p,['internal','metrics','cloud','reporting']),i18n:'cat_Internal'},
 };
+// Skill categories key off the registry's explicit `category` field
+// (finance / business / legal …), falling back to tag matching.
+const SCATS_DEF={
+  'All':{fn:()=>true,i18n:'scat_All'},
+  'Finance':{fn:s=>sc(s,'finance',['vat','qqs','soliq','invoice']),i18n:'scat_Finance'},
+  'Business':{fn:s=>sc(s,'business',['sales','hisobot','report']),i18n:'scat_Business'},
+  'Legal':{fn:s=>sc(s,'legal',['contract','shartnoma','legal']),i18n:'scat_Legal'},
+  'Other':{fn:s=>!['finance','business','legal'].includes((s.category||'').toLowerCase()),i18n:'scat_Other'},
+};
 function ht(p,tags){const pt=(p.tags||[]).map(t=>t.toLowerCase()),d=(p.description||'').toLowerCase();return tags.some(t=>pt.includes(t)||d.includes(t))}
+function sc(s,cat,tags){if((s.category||'').toLowerCase()===cat)return true;return ht(s,tags)}
 
-let plugins=[],activeCat='All';
+let plugins=[],skillsCache=null,mode='plugins',activeCat='All';
+function curRegistry(){return mode==='skills'?(skillsCache||[]):plugins}
+function curCats(){return mode==='skills'?SCATS_DEF:CATS_DEF}
+
+async function setMode(m){
+  if(m===mode)return;
+  mode=m;activeCat='All';
+  document.getElementById('modePlugins').classList.toggle('active',m==='plugins');
+  document.getElementById('modeSkills').classList.toggle('active',m==='skills');
+  const sb=document.getElementById('search');
+  sb.value='';
+  sb.placeholder=t(m==='skills'?'skills_search_placeholder':'search_placeholder');
+  if(m==='skills'&&skillsCache===null){
+    try{const r=await fetch(SKILLS_REGISTRY_URL);const d=await r.json();skillsCache=d.skills||[]}
+    catch(e){skillsCache=[]}
+  }
+  buildCategories();render();
+}
 
 function buildCategories(){
   const catEl=document.getElementById('categories');
   catEl.innerHTML='';
-  const usedCats=Object.entries(CATS_DEF).filter(([n,c])=>n==='All'||plugins.some(c.fn));
+  const defs=curCats(),data=curRegistry();
+  const usedCats=Object.entries(defs).filter(([n,c])=>n==='All'||data.some(c.fn));
   usedCats.forEach(([key,cat])=>{
     const b=document.createElement('button');
     b.className='pill'+(key===activeCat?' active':'');
@@ -326,27 +389,43 @@ function render(){
   const grid=document.getElementById('grid');
   const nr=document.getElementById('noResults');
   const stats=document.getElementById('stats');
+  const defs=curCats();
 
-  let f=plugins;
-  if(activeCat!=='All'&&CATS_DEF[activeCat])f=f.filter(CATS_DEF[activeCat].fn);
+  let f=curRegistry();
+  if(activeCat!=='All'&&defs[activeCat])f=f.filter(defs[activeCat].fn);
   if(q)f=f.filter(p=>[p.name,p.description,p.author,...(p.tags||[])].join(' ').toLowerCase().includes(q));
 
-  stats.innerHTML=`<span><strong>${f.length}</strong> ${t('stats_plugins')}</span><span><strong>${Object.keys(CATS_DEF).length-1}</strong> ${t('stats_categories')}</span><span>${t('stats_opensource')}</span>`;
+  const unitKey=mode==='skills'?'stats_skills':'stats_plugins';
+  stats.innerHTML=`<span><strong>${f.length}</strong> ${t(unitKey)}</span><span><strong>${Object.keys(defs).length-1}</strong> ${t('stats_categories')}</span><span>${t('stats_opensource')}</span>`;
 
-  if(!f.length){grid.innerHTML='';nr.style.display='block';return}
+  if(!f.length){
+    grid.innerHTML='';
+    nr.innerHTML=t(mode==='skills'?'no_results_skills':'no_results');
+    nr.style.display='block';return;
+  }
   nr.style.display='none';
   grid.innerHTML=f.map((p,i)=>card(p,i)).join('');
 }
 
+function tierBadge(s){
+  const tr=(s.tier||'community').toLowerCase();
+  return `<span class="tier tier-${esc(tr)}">${esc(tr)}</span>`;
+}
+
 function card(p,i){
   const tags=(p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-  const url=p.homepage||p.git_url||'#';
   const delay=Math.min(i*.05,.55);
+  const isSkill=mode==='skills';
+  // Skills have no homepage field — link to the repo subdir.
+  const url=isSkill
+    ? `https://github.com/QANOT/qanot-skills/tree/main/skills/${esc(p.name)}`
+    : (p.homepage||p.git_url||'#');
+  const badge=isSkill?tierBadge(p):'';
   return`<div class="card" style="animation-delay:${delay}s">
     <div class="card-body">
       <div class="card-top">
         <a href="${esc(url)}" target="_blank" class="card-name">${esc(p.name)}</a>
-        <span class="card-ver">${esc(p.version)}</span>
+        <span class="card-ver">${badge}${esc(p.version)}</span>
       </div>
       <div class="card-desc">${esc(p.description)}</div>
       <div class="card-tags">${tags}</div>
@@ -359,7 +438,8 @@ function card(p,i){
 }
 
 function cpInstall(btn,name){
-  navigator.clipboard.writeText('qanot plugin install '+name).then(()=>{
+  const verb=mode==='skills'?'skill':'plugin';
+  navigator.clipboard.writeText(`qanot ${verb} install ${name}`).then(()=>{
     btn.textContent='copied!';btn.classList.add('copied');
     setTimeout(()=>{btn.textContent='$ install '+name;btn.classList.remove('copied')},1400);
   });
